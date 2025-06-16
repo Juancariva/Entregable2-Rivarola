@@ -57,4 +57,4 @@ while (true) {
   nivel++;
 }
 
-alert(`Juego terminado. Puntaje: ${puntaje}\nNiveles superados: ${nivelesSuperados.join(", ")}`);
+alert(`Juego terminado. \nPuntaje: ${puntaje}\nNiveles superados: ${nivelesSuperados.join(" - ")}`);
