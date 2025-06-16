@@ -8,14 +8,17 @@ Pistas que podés recibir si fallás:
 let puntaje = 0;
 let nivelesSuperados = [];
 let intentosIniciales = 2;
+const maxIntentos = 5; // constantes para poder modificar el maximo de intentos, la dificultad y los puntos por nivel (tener en cuenta que los puntos por nivel se multiplican por el nivel actual)
+const dificultad = 5;
+const puntosNivel = 10;
 
 function jugarNivel(nivel) {
-  let numeroSecreto = Math.floor(Math.random() * (nivel * 5)) + 1;
+  let numeroSecreto = Math.floor(Math.random() * (nivel * dificultad)) + 1;
   let intentos = intentosIniciales;
   let adivinanza;
 
   while (intentos > 0) {
-    adivinanza = parseInt(prompt(`Nivel ${nivel} - Adivina el número (1 a ${nivel * 5}). Te quedan ${intentos} intentos:`));
+    adivinanza = parseInt(prompt(`Nivel ${nivel} - Adivina el número (1 a ${nivel * dificultad}). Te quedan ${intentos} intentos:`));
 
     if (isNaN(adivinanza)) {
       alert("Por favor, ingresá un número válido.");
@@ -24,10 +27,10 @@ function jugarNivel(nivel) {
 
     if (adivinanza === numeroSecreto) {
       alert("¡Correcto!");
-      puntaje = puntaje + (nivel * 10);
+      puntaje = puntaje + (nivel * puntosNivel);
       nivelesSuperados.push(nivel);
       if (nivel % 2 === 1) {
-      intentosIniciales = Math.min(intentosIniciales + 1, 5); // en los niveles impares suma 1 intento (nivel 1, 3, 5, etc), pero no más de 5
+      intentosIniciales = Math.min(intentosIniciales + 1, maxIntentos); // en los niveles impares suma 1 intento (nivel 1, 3, 5, etc), pero no más de 5
       }
       return true;
     }
