@@ -4,12 +4,12 @@ let puntaje = 0;
 let nivelesSuperados = [];
 
 function jugarNivel(nivel) {
-  let numeroSecreto = Math.floor(Math.random() * (nivel * 5)) + 1;
+  let numeroSecreto = Math.floor(Math.random() * (nivel * 3)) + 1;
   let intentos = 3;
   let adivinanza;
 
   while (intentos > 0) {
-    adivinanza = parseInt(prompt(`Nivel ${nivel} - Adivina el número (1 a ${nivel * 5}). Te quedan ${intentos} intentos:`));
+    adivinanza = parseInt(prompt(`Nivel ${nivel} - Adivina el número (1 a ${nivel * 3}). Te quedan ${intentos} intentos:`));
 
     if (adivinanza === numeroSecreto) {
       alert("¡Correcto!");
