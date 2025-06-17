@@ -11,6 +11,7 @@ let intentosIniciales = 2;
 const maxIntentos = 5; // constantes para poder modificar el maximo de intentos, la dificultad y los puntos por nivel (tener en cuenta que los puntos por nivel se multiplican por el nivel actual)
 const dificultad = 5;
 const puntosNivel = 10;
+const nivelFinal = 10;
 
 function jugarNivel(nivel) {
   let numeroSecreto = Math.floor(Math.random() * (nivel * dificultad)) + 1;
@@ -58,6 +59,12 @@ while (true) {
   let seguir = jugarNivel(nivel);
   if (!seguir) break;
   nivel++;
+
+  if (nivel > nivelFinal) {
+    alert(`¡Ganaste el juego! Superaste todos los niveles.\nPuntaje final: ${puntaje}\nNiveles superados: ${nivelesSuperados.join(" - ")}`);
+    break;
+  }
 }
+
 
 alert(`Juego terminado. \nPuntaje: ${puntaje}\nNiveles superados: ${nivelesSuperados.join(" - ")}`);
