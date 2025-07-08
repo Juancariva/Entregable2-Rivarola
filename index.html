@@ -1,13 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Juego Adivinar Nº</title>
-    <link rel="stylesheet" href="css/style.css">
-    <script src="js/main.js" defer ></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Juego: Adiviná el Número</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="js/main.js" defer></script>
 </head>
 <body>
-    
+  <header>
+    <h1>🎯 Adiviná el Número</h1>
+    <p>Ingresá un número. Tenés intentos limitados para adivinarlo.</p>
+  </header>
+
+  <main>
+    <div id="juego">
+      <p id="nivel-info"></p>
+      <p id="intentos-info"></p>
+      <p id="rango-info"></p>
+      <div class="formulario">
+        <input type="number" id="input-numero" placeholder="Tu número" />
+        <button id="btn-adivinar">Adivinar</button>
+      </div>
+      <p id="mensaje"></p>
+    </div>
+
+    <section id="resultado">
+      <p id="puntaje-info"></p>
+      <p id="niveles-superados"></p>
+      <p id="ganaste" class="oculto">🎉 ¡Ganaste el juego!</p>
+    </section>
+
+    <p>
+      <strong>Pistas:</strong><br />
+      Estás <em>un poco</em> alto/bajo (diferencia de 1 número)<br />
+      Estás <em>muy</em> alto/bajo (diferencia de 2 números)<br />
+      Estás <em>demasiado</em> alto/bajo (diferencia de 3 o más números)
+    </p>
+
+
+  </main>
+
 </body>
 </html>
