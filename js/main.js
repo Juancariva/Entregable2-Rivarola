@@ -1,14 +1,17 @@
-// Constantes y variables principales
+// Constantes generales
 const dificultad = 5;
 const puntosNivel = 10;
 const maxIntentos = 7;
 
-let nivel = 1;
-let puntaje = 0;
-let nivelesSuperados = [];
-let intentosIniciales = 3;
-let numeroSecreto;
-let intentos;
+// Objeto para encapsular el estado del juego
+const juego = { 
+  nivel: 1, 
+  puntaje: 0, 
+  nivelesSuperados: [], 
+  intentosIniciales: 3, 
+  intentos: 0, 
+  numeroSecreto: null 
+};
 
 const inputNumero = document.getElementById("input-numero");
 const btnAdivinar = document.getElementById("btn-adivinar");
@@ -20,23 +23,14 @@ const puntajeInfo = document.getElementById("puntaje-info");
 const nivelesSuperadosInfo = document.getElementById("niveles-superados");
 const ganasteMensaje = document.getElementById("ganaste");
 
-// Recuperar datos primero (antes de iniciar nivel)
+// Recuperar datos del localStorage (si hay)
 recuperarDatos();
 
-// Si no hay número secreto recuperado, iniciar nivel nuevo
-if (!numeroSecreto) {  
+// Si no hay número secreto, iniciar nuevo nivel
+if (!juego.numeroSecreto) {  
   iniciarNivel();
 } else {              
-  // Actualizar interfaz con datos recuperados   
-  nivelInfo.textContent = `Nivel: ${nivel}`;     
-  intentosInfo.textContent = `Intentos restantes: ${intentos}`;  
-  rangoInfo.textContent = `El número está entre 1 y ${nivel * dificultad}`;  
-  puntajeInfo.textContent = `Puntaje: ${puntaje}`;                 
-  nivelesSuperadosInfo.textContent = `Niveles superados: ${nivelesSuperados.join(", ")}`;  // NUEVO
-  inputNumero.disabled = false;  
-  btnAdivinar.disabled = false;  
-  mensaje.textContent = "";  
-  inputNumero.focus();     
+  actualizarInterfaz();     
 }
 
 btnAdivinar.addEventListener("click", () => {
@@ -47,39 +41,35 @@ btnAdivinar.addEventListener("click", () => {
     return;
   }
 
-  if (adivinanza === numeroSecreto) {
+  if (adivinanza === juego.numeroSecreto) {
     mostrarMensaje("¡Correcto! 🎉", "acierto");
 
-    puntaje += nivel * puntosNivel;
-    nivelesSuperados.push(nivel);
+    juego.puntaje += juego.nivel * puntosNivel;
+    juego.nivelesSuperados.push(juego.nivel);
 
     // Sumar un intento si el nivel es impar, sin pasarse del tope que es 7 en este caso
-    if (nivel % 2 === 1) {
-      intentosIniciales = Math.min(intentosIniciales + 1, maxIntentos);
+    if (juego.nivel % 2 === 1) {
+      juego.intentosIniciales = Math.min(juego.intentosIniciales + 1, maxIntentos);
     }
 
     actualizarResultados();
 
-    if (nivel === 10) {
+    if (juego.nivel === 10) {
       ganasteMensaje.classList.remove("oculto");
       desactivarInput();
-      localStorage.clear();
+      localStorage.removeItem("juego");
     } else {
-      nivel++;
+      juego.nivel++;
       iniciarNivel();
     }
   } else {
-    intentos--;
+    juego.intentos--;
     mostrarPista(adivinanza);
 
-    if (intentos <= 0) {
-      mostrarMensaje(`Perdiste. El número era ${numeroSecreto}`, "error");
+    if (juego.intentos <= 0) {
+      mostrarMensaje(`Perdiste. El número era ${juego.numeroSecreto}`, "error");
       desactivarInput();
-      localStorage.removeItem("puntaje");
-      localStorage.removeItem("nivelesSuperados");
-      localStorage.removeItem("nivel");       
-      localStorage.removeItem("intentos");   
-      localStorage.removeItem("numeroSecreto");
+      localStorage.removeItem("juego");
     } else {
       actualizarIntentos();
       guardarEnStorage();
@@ -96,17 +86,22 @@ inputNumero.addEventListener("keydown", (e) => {
 });                                             
 
 function iniciarNivel() {
-  numeroSecreto = Math.floor(Math.random() * (nivel * dificultad)) + 1;
-  intentos = intentosIniciales;
+  juego.numeroSecreto = Math.floor(Math.random() * (juego.nivel * dificultad)) + 1;
+  juego.intentos = juego.intentosIniciales;
+  actualizarInterfaz();
+  guardarEnStorage();
+}
 
-  nivelInfo.textContent = `Nivel: ${nivel}`;
-  intentosInfo.textContent = `Intentos restantes: ${intentos}`;
-  rangoInfo.textContent = `El número está entre 1 y ${nivel * dificultad}`;
+function actualizarInterfaz() { 
+  nivelInfo.textContent = `Nivel: ${juego.nivel}`; 
+  intentosInfo.textContent = `Intentos restantes: ${juego.intentos}`; 
+  rangoInfo.textContent = `El número está entre 1 y ${juego.nivel * dificultad}`; 
+  puntajeInfo.textContent = `Puntaje: ${juego.puntaje}`; // Nuevo
+  nivelesSuperadosInfo.textContent = `Niveles superados: ${juego.nivelesSuperados.join(", ")}`; 
   mensaje.textContent = "";
   inputNumero.disabled = false;
   btnAdivinar.disabled = false;
   inputNumero.focus();
-  guardarEnStorage();
 }
 
 function mostrarMensaje(texto, tipo) {
@@ -115,8 +110,8 @@ function mostrarMensaje(texto, tipo) {
 }
 
 function mostrarPista(adivinanza) {
-  const diferencia = Math.abs(adivinanza - numeroSecreto);
-  if (adivinanza > numeroSecreto) {
+  const diferencia = Math.abs(adivinanza - juego.numeroSecreto);
+  if (adivinanza > juego.numeroSecreto) {
     if (diferencia === 1) {
       mostrarMensaje("Estás un poco alto.");
     } else if (diferencia === 2) {
@@ -136,12 +131,12 @@ function mostrarPista(adivinanza) {
 }
 
 function actualizarIntentos() {
-  intentosInfo.textContent = `Intentos restantes: ${intentos}`;
+  intentosInfo.textContent = `Intentos restantes: ${juego.intentos}`;
 }
 
 function actualizarResultados() {
-  puntajeInfo.textContent = `Puntaje: ${puntaje}`;
-  nivelesSuperadosInfo.textContent = `Niveles superados: ${nivelesSuperados.join(", ")}`;
+  puntajeInfo.textContent = `Puntaje: ${juego.puntaje}`;
+  nivelesSuperadosInfo.textContent = `Niveles superados: ${juego.nivelesSuperados.join(", ")}`;
   guardarEnStorage();
 }
 
@@ -151,39 +146,14 @@ function desactivarInput() {
 }
 
 function guardarEnStorage() {
-  localStorage.setItem("puntaje", puntaje);
-  localStorage.setItem("nivelesSuperados", JSON.stringify(nivelesSuperados));
-  localStorage.setItem("nivel", nivel);              
-  localStorage.setItem("intentos", intentos);        
-  localStorage.setItem("numeroSecreto", numeroSecreto);  
+  localStorage.setItem("juego", JSON.stringify(juego));  
 }
 
 function recuperarDatos() {
-  const puntajeGuardado = localStorage.getItem("puntaje");
-  const nivelesGuardados = localStorage.getItem("nivelesSuperados");
-  const nivelGuardado = localStorage.getItem("nivel");          
-  const intentosGuardados = localStorage.getItem("intentos");    
-  const numeroSecretoGuardado = localStorage.getItem("numeroSecreto");
+  const datosGuardados = localStorage.getItem("juego");
 
-  if (puntajeGuardado) {
-    puntaje = parseInt(puntajeGuardado);
-    puntajeInfo.textContent = `Puntaje: ${puntaje}`;
-  }
-
-  if (nivelesGuardados) {
-    nivelesSuperados = JSON.parse(nivelesGuardados);
-    nivelesSuperadosInfo.textContent = `Niveles superados: ${nivelesSuperados.join(", ")}`;
-  }
-
-  if (nivelGuardado) {
-    nivel = parseInt(nivelGuardado);
-  }
-
-  if (intentosGuardados) {
-    intentos = parseInt(intentosGuardados);
-  }
-
-  if (numeroSecretoGuardado) {
-    numeroSecreto = parseInt(numeroSecretoGuardado);
+  if (datosGuardados) {
+    const datos = JSON.parse(datosGuardados); 
+    Object.assign(juego, datos); 
   }
 }
