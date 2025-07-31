@@ -59,9 +59,20 @@ btnAdivinar.addEventListener("click", () => {
       desactivarInput();
       localStorage.removeItem("juego");
     } else {
-      juego.nivel++;
-      iniciarNivel();
-    }
+      Swal.fire({
+        title: `¡Nivel ${juego.nivel} superado! 🎉`, 
+        text: "Vamos al siguiente nivel",            
+        icon: "success",                             
+        timer: 2000, 
+        timerProgressBar: true, 
+        showConfirmButton: false, 
+        allowOutsideClick: false,
+        allowEscapeKey: false               
+      }).then(() => {                                
+        juego.nivel++;                               
+        iniciarNivel();                             
+  });                                           
+}
   } else {
     juego.intentos--;
     mostrarPista(adivinanza);
