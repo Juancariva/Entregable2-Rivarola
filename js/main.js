@@ -113,19 +113,19 @@ function mostrarPista(adivinanza) {
   const diferencia = Math.abs(adivinanza - juego.numeroSecreto);
   if (adivinanza > juego.numeroSecreto) {
     if (diferencia === 1) {
-      mostrarMensaje("Estás un poco alto.");
+      mostrarMensaje(`${adivinanza} es un poco alto.`);
     } else if (diferencia === 2) {
-      mostrarMensaje("Estás muy alto.");
+      mostrarMensaje(`${adivinanza} es muy alto.`);
     } else {
-      mostrarMensaje("Estás demasiado alto.");
+      mostrarMensaje(`${adivinanza} es demasiado alto.`);
     }
   } else {
     if (diferencia === 1) {
-      mostrarMensaje("Estás un poco bajo.");
+      mostrarMensaje(`${adivinanza} es un poco bajo.`);
     } else if (diferencia === 2) {
-      mostrarMensaje("Estás muy bajo.");
+      mostrarMensaje(`${adivinanza} es muy bajo.`);
     } else {
-      mostrarMensaje("Estás demasiado bajo.");
+      mostrarMensaje(`${adivinanza} es demasiado bajo.`);
     }
   }
 }
