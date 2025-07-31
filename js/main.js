@@ -63,7 +63,7 @@ btnAdivinar.addEventListener("click", () => {
         title: `¡Nivel ${juego.nivel} superado! 🎉`, 
         text: "Vamos al siguiente nivel",            
         icon: "success",                             
-        timer: 2000, 
+        timer: 1500, 
         timerProgressBar: true, 
         showConfirmButton: false, 
         allowOutsideClick: false,
