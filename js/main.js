@@ -160,11 +160,35 @@ function guardarEnStorage() {
   localStorage.setItem("juego", JSON.stringify(juego));  
 }
 
-function recuperarDatos() {
-  const datosGuardados = localStorage.getItem("juego");
+async function recuperarDatos() {
+  try {
+    const datosGuardados = localStorage.getItem("juego");
 
-  if (datosGuardados) {
-    const datos = JSON.parse(datosGuardados); 
-    Object.assign(juego, datos); 
+    if (datosGuardados) {
+      const datos = JSON.parse(datosGuardados);            
+      Object.assign(juego, datos);                         
+    }
+  } catch (error) {
+    // Alerta si ocurre un error al recuperar los datos
+    await Swal.fire({
+      icon: 'error',
+      title: '⚠️ Error al cargar los datos',
+      text: 'No se pudieron recuperar los datos del juego. Se reiniciara el juego.',
+      confirmButtonText: 'Entendido',
+      allowOutsideClick: false,
+      allowEscapeKey: false
+    });
+
+    localStorage.removeItem("juego");  // limpiar los datos si están con algun error o corruptos
+  } finally {
+    // Notificación indicando que se cargaron (o reiniciaron) los datos
+    Swal.fire({
+      toast: true,
+      position: 'top-end',
+      icon: 'info',
+      title: 'Datos cargados (o reiniciados)',
+      showConfirmButton: false,
+      timer: 2000
+    });
   }
-}
+}  
